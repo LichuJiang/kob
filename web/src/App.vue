@@ -3,9 +3,6 @@
   <router-view/>
 </template>
 
-<style>
-</style>
-
 <script>
 import NavBar from './components/NavBar.vue'
 import "bootstrap/dist/css/bootstrap.min.css"
@@ -17,3 +14,7 @@ export default {
   }
 }
 </script>
+
+<style>
+</style>
+

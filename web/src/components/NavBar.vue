@@ -8,13 +8,13 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <router-link class = "nav-link" :to = "{name : 'pk_index'}">Contests</router-link>
+          <router-link :class="route_name == 'pk_index' ? 'nav-link active':'nav-link'" :to = "{name : 'pk_index'}">Contests</router-link>
         </li>
         <li class="nav-item">
-          <router-link class = "nav-link" :to = "{name : 'record_index'}">Matches</router-link>
+          <router-link :class="route_name == 'record_index' ? 'nav-link active':'nav-link'" :to = "{name : 'record_index'}">Matches</router-link>
         </li>
         <li class="nav-item">
-            <router-link class = "nav-link" :to = "{name : 'ranklist_index'}">Ranking</router-link>
+            <router-link :class="route_name == 'ranklist_index' ? 'nav-link active':'nav-link'" :to = "{name : 'ranklist_index'}">Ranking</router-link>
         </li>
        
       </ul>
@@ -36,8 +36,15 @@
 </template>
 
 <script>
+import {useRoute} from 'vue-router'
+import {computed} from 'vue'
+
 export default {
-    
+    setup() {
+      const route = useRoute();
+      let route_name = computed(()=>route.name);
+      return {route_name}
+    }
 }
 </script>
 
