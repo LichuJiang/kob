@@ -4,23 +4,20 @@
     </div>
 </template>
 
-
 <script>
 import GameMap from './GameMap.vue'
 
-
 export default {
-    components:{
+    components: {
         GameMap,
     }
 }
 </script>
 
-
 <style scoped>
 div.playground {
     width: 60vw;
     height: 70vh;
-    margin: 30px auto;
+    margin: 40px auto;
 }
 </style>

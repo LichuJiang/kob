@@ -19,6 +19,8 @@ export class AcGameObject {
     }
 
     destroy() {
+        this.on_destroy();
+        
         for (let i in AC_GAME_OBJECTS) {
             const obj = AC_GAME_OBJECTS[i];
             if (obj === this) {

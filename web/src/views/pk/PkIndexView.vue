@@ -5,14 +5,12 @@
 <script>
 import PlayGround from '../../components/PlayGround.vue'
 
-
 export default {
-    components:{
+    components: {
         PlayGround
     }
 }
 </script>
 
 <style scoped>
-
 </style>

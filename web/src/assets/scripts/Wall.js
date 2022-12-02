@@ -19,6 +19,6 @@ export class Wall extends AcGameObject {
         const ctx = this.gamemap.ctx;
 
         ctx.fillStyle = this.color;
-        ctx.fillRect(this.c*L, this.r*L, L, L);
+        ctx.fillRect(this.c*L, this.r*L, L, L)
     }
 }
