@@ -3,7 +3,7 @@ package com.example.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.backend.mapper.UserMapper;
 import com.example.backend.pojo.User;
-import com.example.backend.service.impl.utils.UserDetialsImpl;
+import com.example.backend.service.impl.utils.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +23,6 @@ public class UserDetialsServiceImpl implements UserDetailsService {
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
-        return new UserDetialsImpl(user);
+        return new UserDetailsImpl(user);
     }
 }
