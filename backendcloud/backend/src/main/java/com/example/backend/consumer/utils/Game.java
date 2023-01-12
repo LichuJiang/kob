@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.backend.consumer.WebSocketServer;
 import com.example.backend.pojo.Bot;
 import com.example.backend.pojo.Record;
+import com.example.backend.pojo.User;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -94,13 +95,48 @@ public class Game extends Thread {
         }
         return res.toString();
     }
+
+    private void updateUserRating(Player player, Integer rating) {
+        User user = WebSocketServer.userMapper.selectById(player.getId());
+        user.setRating(rating);
+        WebSocketServer.userMapper.updateById(user);
+
+    }
+
     private void saveToDatebase() {
+        Integer ratingA = WebSocketServer.userMapper.selectById(playerA.getId()).getRating();
+        Integer ratingB = WebSocketServer.userMapper.selectById(playerB.getId()).getRating();
+
+        if ("A".equals(loser)) {
+            ratingA -= 2;
+            ratingB += 5;
+        } else if ("B".equals(loser)) {
+            ratingA += 5;
+            ratingB -= 2;
+        }
+
+        System.out.println("入库数据");
+        updateUserRating(playerA, ratingA);
+        updateUserRating(playerB, ratingB);
+        System.out.println(playerA.getId());
+        System.out.println(playerA.getSx());
+        System.out.println(playerA.getSy());
+        System.out.println(playerB.getId());
+        System.out.println(playerB.getSx());
+        System.out.println(playerB.getSy());
+        System.out.println(playerA.getStepsString());
+        System.out.println(playerB.getStepsString());
+        System.out.println(getMapString());
+        System.out.println(loser);
+        System.out.println(new Date());
+
+
         Record record = new Record(
                 null,
                 playerA.getId(),
+                playerB.getId(),
                 playerA.getSx(),
                 playerA.getSy(),
-                playerB.getId(),
                 playerB.getSx(),
                 playerB.getSy(),
                 playerA.getStepsString(),
@@ -109,6 +145,7 @@ public class Game extends Thread {
                 loser,
                 new Date()
         );
+        System.out.println("入库完毕");
 
         WebSocketServer.recordMapper.insert(record);
     }
@@ -273,6 +310,7 @@ public class Game extends Thread {
         resp.put("event", "result");
         resp.put("loser", loser);
         saveToDatebase();
+        System.out.println("数据入库处");
         sendAllMessage(resp.toJSONString());
     }
 

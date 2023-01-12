@@ -162,7 +162,7 @@ export default {
             })
         }
         
-        refresh_bots();
+        //refresh_bots();
 
         const add_bot = () => {
             botadd.error_message = "";
