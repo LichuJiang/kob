@@ -15,7 +15,7 @@ public class MatchingPool extends Thread{
     private static List<Player> players = new ArrayList<>();
     private ReentrantLock lock = new ReentrantLock();
     private static RestTemplate restTemplate;
-    private final static String startGameUrl = "http://127.0.0.1:3000/pk/start/game/";
+    private final static String startGameUrl = "https://app4477.acapp.acwing.com.cn/api/pk/start/game/";
 
     @Autowired
     public void setRestTemplate(RestTemplate restTemplate) {
@@ -70,7 +70,7 @@ public class MatchingPool extends Thread{
     }
 
     private void matchPlayers() {
-        System.out.println("match players: " + players.toString());
+        //System.out.println("match players: " + players.toString());
         boolean[] used = new boolean[players.size()];
         for (int i = 0; i < players.size(); i++) {
             if (used[i]) continue;

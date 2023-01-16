@@ -1,6 +1,5 @@
 package com.example.botrunningsystem.service.impl.utils;
 
-import com.example.botrunningsystem.utils.BotInterface;
 import org.joor.Reflect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,9 +7,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.UUID;
+import java.util.function.Supplier;
+
 @Component
-public class Consumer extends Thread{
+public class Consumer extends Thread {
     private Bot bot;
     private static RestTemplate restTemplate;
     private final static String receiveBotMoveUrl = "http://127.0.0.1:3000/pk/receive/bot/move/";
@@ -25,19 +29,16 @@ public class Consumer extends Thread{
         this.start();
 
         try {
-            this.join(timeout); //最多等待timeout秒
+            this.join(timeout);  // 最多等待timeout秒
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            this.interrupt(); //中断当前线程
+            this.interrupt();  // 终端当前线程
         }
-
-
     }
 
-    private String addUid(String code, String uid) {
-        //在code中的Bot类名后加入uid
-        int k = code.indexOf(" implements com.example.botrunningsystem.utils.BotInterface");
+    private String addUid(String code, String uid) {  // 在code中的Bot类名后添加uid
+        int k = code.indexOf(" implements java.util.function.Supplier<Integer>");
         return code.substring(0, k) + uid + code.substring(k);
     }
 
@@ -46,14 +47,22 @@ public class Consumer extends Thread{
         UUID uuid = UUID.randomUUID();
         String uid = uuid.toString().substring(0, 8);
 
-        //对于同一个类名只会编译一次，但是时刻都有新用户输入，所以在类名后加一个随机字符串
-        //让类名不一样这也就可以每次都编译
-        BotInterface botInterface = Reflect.compile(
-            "com.example.botrunningsystem.utils.Bot" + uid,
+        Supplier<Integer> botInterface = Reflect.compile(
+                "com.example.botrunningsystem.utils.Bot" + uid,
                 addUid(bot.getBotCode(), uid)
         ).create().get();
-        Integer direction = botInterface.nextMove(bot.getInput());
-        //System.out.println("move-dir: " + bot.getUserId() + " " + direction);
+
+        File file = new File("input.txt");
+        try (PrintWriter fout = new PrintWriter(file)){
+            fout.println(bot.getInput());
+            fout.flush();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        Integer direction = botInterface.get();
+        System.out.println("move-direction: " + bot.getUserId() + " " + direction);
 
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
         data.add("user_id", bot.getUserId().toString());
@@ -62,3 +71,4 @@ public class Consumer extends Thread{
         restTemplate.postForObject(receiveBotMoveUrl, data, String.class);
     }
 }
+

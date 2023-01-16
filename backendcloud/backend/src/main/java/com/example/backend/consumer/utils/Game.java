@@ -262,7 +262,7 @@ public class Game extends Thread {
                     lock.unlock();
                 }
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                e.printStackTrace();
             }
         }
         return false;

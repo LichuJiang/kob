@@ -6,7 +6,7 @@ import com.example.backend.service.pk.ReceiveBotMoveService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ReceiveBotMoveServiceService implements ReceiveBotMoveService {
+public class ReceiveBotMoveServiceImpl implements ReceiveBotMoveService {
     @Override
     public String receiveBotMove(Integer userId, Integer direction) {
         System.out.println("receive bot move: " + userId + " " + direction + " ");
